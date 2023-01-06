@@ -1,9 +1,9 @@
-const contacts = require("../models/contacts");
+const { Contact } = require("../models/contacts");
 const { HttpError } = require("../helpers");
 
 const getAll = async (req, res, next) => {
   try {
-    const contactsAll = await contacts.listContacts();
+    const contactsAll = await Contact.find({});
     res.status(200).json(contactsAll);
   } catch (error) {
     next(error);
@@ -13,7 +13,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await contacts.getContactById(contactId);
+    const contact = await Contact.findById(contactId);
     if (!contact) {
       throw HttpError(404);
     }
@@ -25,7 +25,7 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   try {
-    const contact = await contacts.addContact(req.body);
+    const contact = await Contact.create(req.body);
     res.status(201).json(contact);
   } catch (error) {
     next(error);
@@ -34,7 +34,9 @@ const add = async (req, res, next) => {
 const updateById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await contacts.removeContact(contactId, req.body);
+    const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!contact) {
       throw HttpError(404);
     }
@@ -47,11 +49,26 @@ const updateById = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await contacts.updateContact(contactId);
+    const contact = await Contact.findByIdAndRemove(contactId);
     if (!contact) {
       throw HttpError(404);
     }
     res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!contact) {
+      throw HttpError(404);
+    }
+    res.status(200).json(contact);
   } catch (error) {
     next(error);
   }
@@ -63,4 +80,5 @@ module.exports = {
   add,
   updateById,
   deleteById,
+  updateStatusContact,
 };
