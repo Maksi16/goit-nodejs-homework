@@ -10,7 +10,7 @@ const getAll = async (req, res, next) => {
       "email"
     );
     if (favorite) {
-      contactsList = await Contact.find(
+      contactsAll = await Contact.find(
         { owner, favorite },
         { skip, limit }
       ).populate("owner", "email");
