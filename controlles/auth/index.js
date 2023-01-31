@@ -4,6 +4,8 @@ const getCurrent = require("./currentUser");
 const logout = require("./logoutUsers");
 const updateSubscription = require("./updateSubscriptionUsers");
 const updateAvatar = require("./updateAvatar");
+const verify = require("./verify");
+const resendVerify = require("./resendVerify");
 
 module.exports = {
   register,
@@ -12,4 +14,6 @@ module.exports = {
   logout,
   updateSubscription,
   updateAvatar,
+  verify,
+  resendVerify,
 };
